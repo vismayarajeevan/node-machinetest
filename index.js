@@ -7,9 +7,16 @@ dotenv.config()
 // mongodb
 require('./config/db')
 
+
+
 const app = express()
 app.use(cors())
 app.use(express.json())
+
+
+
+const auth = require('./router/auth')
+app.use('/auth',auth)
 
 const PORT = process.env.PORT || 3000
 
