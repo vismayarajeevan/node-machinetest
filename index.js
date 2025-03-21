@@ -18,6 +18,9 @@ app.use(express.json())
 const auth = require('./router/auth')
 app.use('/auth',auth)
 
+const categoryRouter = require('./router/categoryRouter')
+app.use('/api/categories')
+
 const PORT = process.env.PORT || 3000
 
 app.listen(PORT,()=>{
