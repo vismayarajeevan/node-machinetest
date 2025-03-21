@@ -31,21 +31,24 @@ exports.getAllUsers = async (req, res) => {
     }
 };
 
-
 exports.promoteToAdmin = async (req, res) => {
     try {
         const { userId } = req.params;
+        const { isAdmin } = req.body; 
 
         const user = await User.findById(userId);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
 
-        user.isAdmin = true;
+        user.isAdmin = isAdmin;
         await user.save();
 
-        res.status(200).json({ message: "User promoted to admin", user });
+        res.status(200).json({
+            message: `User ${isAdmin ? "promoted to admin" : "demoted to user"}`,
+            user
+        });
     } catch (error) {
-        res.status(500).json({ message: "Failed to promote user", error: error.message });
+        res.status(500).json({ message: "Failed to update user role", error: error.message });
     }
 };
