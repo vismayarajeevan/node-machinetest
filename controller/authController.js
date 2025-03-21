@@ -14,7 +14,7 @@ const transport = nodemailer.createTransport({
 })
 
 
-
+// register
 exports.registerController = async(req,res)=>{
    try {
 
@@ -74,4 +74,31 @@ exports.registerController = async(req,res)=>{
     res.status(500).json({ message: 'Failed to send OTP', error: error.message })
    }
     
+}
+
+
+// verify user
+exports.verifyOtp = async (req,res)=>{
+    try {
+        const {email,otp} = req.body
+        const existingUser = await users.findOne({email})
+
+        if(!existingUser){
+            res.status(400).json('user not found')
+        }
+        if(existingUser.otp !=otp){
+            res.status(400).json('Invalid otp')
+        }
+
+        existingUser.verified = true
+        existingUser.otp =''
+
+        await existingUser.save()
+        res.status(200).json({message:'User verified'})
+        
+    } catch (error) {
+        res.status(500).json({message:"Failed to verify user"})
+        console.log(error);
+        
+    }
 }
