@@ -63,7 +63,7 @@ const verifyAdminToken = (req, res, next) => {
                 console.log("Decoded JWT (Admin):", req.user); 
                 next(); 
             } else {
-                console.log("Admin check failed. User is not an admin.");  // Log when the user is not an admin
+                console.log("Admin check failed. User is not an admin.");
                 return res.status(403).json({ message: "You are not an admin!" });
             }
         });

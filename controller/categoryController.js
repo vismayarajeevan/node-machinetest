@@ -54,3 +54,53 @@ exports.getCategoryFoods = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+exports.updateCategory = async (req, res) => {
+    try {
+        const { categoryId } = req.params;
+        const { name, description, parentCategory } = req.body;
+
+        const updatedCategory = await Category.findByIdAndUpdate(
+            categoryId,
+            { name, description, parentCategory },
+            { new: true }
+        );
+
+        if (!updatedCategory) {
+            return res.status(404).json({ error: "Category not found" });
+        }
+
+        res.status(200).json(updatedCategory);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
+exports.deleteCategory = async (req, res) => {
+    try {
+        const { categoryId } = req.params;
+
+        // Find category to delete
+        const category = await Category.findById(categoryId);
+        if (!category) {
+            return res.status(404).json({ error: "Category not found" });
+        }
+
+        // Recursively delete all subcategories
+        const deleteSubcategories = async (parentId) => {
+            const subcategories = await Category.find({ parentCategory: parentId });
+            for (let subcategory of subcategories) {
+                await deleteSubcategories(subcategory._id);
+                await Category.findByIdAndDelete(subcategory._id);
+            }
+        };
+
+        await deleteSubcategories(categoryId);
+        await Category.findByIdAndDelete(categoryId);
+
+        res.status(200).json({ message: "Category and its subcategories deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
