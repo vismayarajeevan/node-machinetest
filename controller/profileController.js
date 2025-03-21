@@ -1,8 +1,6 @@
 const User = require("../model/userModel");
-const Category = require("../model/categoryModel");
-const Food = require("../model/foodModel");
 
-// ✅ Update user profile
+
 exports.updateProfile = async (req, res) => {
     try {
         const { userId } = req.user;
@@ -17,13 +15,13 @@ exports.updateProfile = async (req, res) => {
         user.email = email || user.email;
         await user.save();
 
-        res.status(200).json({ message: "Profile updated successfully", user });
+        res.status(200).json({ message: "Profile updated successfully" });
     } catch (error) {
         res.status(500).json({ message: "Failed to update profile", error: error.message });
     }
 };
 
-// ✅ Admin - Get all users
+
 exports.getAllUsers = async (req, res) => {
     try {
         const users = await User.find({}, "userName email isAdmin");
@@ -33,7 +31,7 @@ exports.getAllUsers = async (req, res) => {
     }
 };
 
-// ✅ Admin - Promote user to admin
+
 exports.promoteToAdmin = async (req, res) => {
     try {
         const { userId } = req.params;
