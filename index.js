@@ -26,6 +26,9 @@ app.use("/api/categories", categoryRoutes);
 const foodRoutes = require("./router/foodRouter");
 app.use("/api/foods", foodRoutes);
 
+const  profileRoutes= require("./router/profileRoutes")
+app.use("/api/profile", profileRoutes);
+
 const PORT = process.env.PORT || 3000
 
 app.listen(PORT,()=>{
