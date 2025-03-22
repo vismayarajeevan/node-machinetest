@@ -21,7 +21,7 @@ app.use('/auth',auth)
 
 const categoryRoutes = require('./router/categoryRouter')
 
-app.use("/api/categories", categoryRoutes);
+app.use("/api/", categoryRoutes);
 
 const foodRoutes = require("./router/foodRouter");
 app.use("/api/foods", foodRoutes);

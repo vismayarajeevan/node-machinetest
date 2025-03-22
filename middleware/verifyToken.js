@@ -13,14 +13,14 @@ const verifyUserToken = (req, res, next) => {
         }
 
 
-        jwt.verify(token, process.env.JWT_SECRET_KEY, (error, decoded) => {
-            console.log("JWT_SECRET is "+ process.env.JWT_SECRET_KEY,);
+        jwt.verify(token, process.env.JWT_SECRETKEY, (error, decoded) => {
+            console.log("JWT_SECRET is "+ process.env.JWT_SECRETKEY,);
             if (error) {
-                console.log("JWT_SECRET is error is  "+ process.env.JWT_SECRET_KEY,);
+                console.log("JWT_SECRET is error is  "+ process.env.JWT_SECRETKEY,);
                 console.error("JWT verification error:", error);
                 return res.status(403).json({ message: "Invalid token", error });
             }
-            console.log("JWT_SECRET is "+ process.env.JWT_SECRET_KEY,);
+            console.log("JWT_SECRET is "+ process.env.JWT_SECRETKEY,);
 
             req.user = decoded;
             console.log("Decoded JWT (User):", req.user);  
@@ -47,7 +47,7 @@ const verifyAdminToken = (req, res, next) => {
         }
 
 
-        jwt.verify(token, process.env.JWT_SECRET_KEY, (error, decoded) => {
+        jwt.verify(token, process.env.JWT_SECRETKEY, (error, decoded) => {
           
             if (error) {
                
@@ -57,7 +57,7 @@ const verifyAdminToken = (req, res, next) => {
 
             console.log("Decoded JWT:", decoded.isAdmin);
 
-            if (decoded.isAdmin === true) {
+            if (decoded.admin  === true) {
                 console.log("Admin check passed. User is an admin."); 
                 req.user = decoded; 
                 console.log("Decoded JWT (Admin):", req.user); 
