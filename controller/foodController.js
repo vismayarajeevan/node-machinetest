@@ -42,27 +42,38 @@ const Category = require("../model/categoryModel");
   }
 
 
+
   exports.updateFood = async (req, res) => {
     try {
         const { foodId } = req.params;
-        const { name, description, price, category } = req.body;
+        let { name, description, price, category } = req.body;
 
+        // Check if the food item exists
         const existingFood = await Food.findById(foodId);
         if (!existingFood) {
             return res.status(404).json({ error: "Food item not found" });
         }
 
-        if (category) {
+        // If category is not provided in the request, retain the existing one
+        if (!category) {
+            category = existingFood.category;
+        } else {
+            // Validate the new category if provided
+            if (!mongoose.Types.ObjectId.isValid(category)) {
+                return res.status(400).json({ error: "Invalid category ID" });
+            }
+
             const existingCategory = await Category.findById(category);
             if (!existingCategory) {
                 return res.status(404).json({ error: "Category not found" });
             }
         }
 
+        // Update the food item
         const updatedFood = await Food.findByIdAndUpdate(
             foodId,
             { name, description, price, category },
-            { new: true }
+            { new: true, runValidators: true }
         );
 
         res.status(200).json(updatedFood);
@@ -70,7 +81,6 @@ const Category = require("../model/categoryModel");
         res.status(500).json({ error: error.message });
     }
 };
-
 
 exports.deleteFood = async (req, res) => {
     try {

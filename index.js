@@ -24,7 +24,7 @@ const categoryRoutes = require('./router/categoryRouter')
 app.use("/api/", categoryRoutes);
 
 const foodRoutes = require("./router/foodRouter");
-app.use("/api/foods", foodRoutes);
+app.use("/api/", foodRoutes);
 
 const  profileRoutes= require("./router/profileRoutes")
 app.use("/api/profile", profileRoutes);
