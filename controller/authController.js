@@ -93,8 +93,14 @@ exports.verifyOtp = async (req,res)=>{
         existingUser.verified = true
         existingUser.otp =''
 
+
+        const token = jwt.sign({
+            id:existingUser._id,
+            admin:existingUser.isAdmin
+        },process.env.JWT_SECRETKEY)
+
         await existingUser.save()
-        res.status(200).json({message:'User verified'})
+        res.status(200).json({message:'User verified',token, userId:existingUser._id, isAdmin:existingUser.isAdmin})
         
     } catch (error) {
         res.status(500).json({message:"Failed to verify user"})
@@ -125,7 +131,7 @@ exports.loginUser = async(req,res)=>{
         // generate jwt token
         const token = jwt.sign({
             id:existingUser._id,
-            admin:existingUser._isAdmin
+            admin:existingUser.isAdmin
         },process.env.JWT_SECRETKEY)
 
         res.status(200).json({message:'Login successful',token, userId:existingUser._id, isAdmin:existingUser.isAdmin})
